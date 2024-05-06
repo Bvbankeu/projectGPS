@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-cv#!2tambjss*%d=ge8k2bj=bl_&=kg(t#i@l*a_(!2+9+0ud!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['84.247.142.194']
 
 
 # Application definition
