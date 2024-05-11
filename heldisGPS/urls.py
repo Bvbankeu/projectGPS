@@ -40,5 +40,6 @@ router.register(r'gpsCoordinates', GpsCoordinatesViewSet, basename='gpsCoordinat
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
-    path('translate/decode/', decode_message, name='decode_message'),  
+    path('translate/login/', login, name='login'),
+    path('translate/onlineGPS/', onlineGPS, name='onlineGPS'),  
 ]
