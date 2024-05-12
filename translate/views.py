@@ -72,3 +72,9 @@ def onlineGPS(request):
         return JsonResponse({'response': date_conversion(date_now)})
     else:
         return JsonResponse({'error': 'Methode non autorisee'}, status=405)
+    
+
+
+def reste(request):
+    if request.method == 'GET':
+        return JsonResponse({'response': '787801010D0A'})
