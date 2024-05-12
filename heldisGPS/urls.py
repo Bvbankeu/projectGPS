@@ -43,4 +43,8 @@ urlpatterns = [
     path('translate/login/', login, name='login'),
     path('translate/onlineGPS/', onlineGPS, name='onlineGPS'),
     path('translate/reste/', reste, name='reste'),
+    path('translate/status/', status, name='status'),
+    path('translate/offlineGPS/', offlineGPS, name='offlineGPS'),
+    path('translate/offlineWifi/', offlineWifi, name='offlineWifi'),
+    path('translate/wifiPositioning/', wifiPositioning, name='wifiPositioning'),
 ]
