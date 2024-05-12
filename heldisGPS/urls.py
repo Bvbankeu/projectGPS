@@ -41,5 +41,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
     path('translate/login/', login, name='login'),
-    path('translate/onlineGPS/', onlineGPS, name='onlineGPS'),  
+    path('translate/onlineGPS/', onlineGPS, name='onlineGPS'),
+    path('translate/reste/', reste, name='reste'),
 ]
