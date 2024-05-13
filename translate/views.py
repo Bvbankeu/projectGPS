@@ -157,4 +157,9 @@ def updateTime(request):
         return JsonResponse({'response': response})
     
 
- 
+def setParams(request):
+    if request.method == 'GET':
+        response = request.GET.get('hex_message', '')
+        date_now = datetime.datetime.now()
+        response = '78781F570030010000000000000000000000000000000000000000000000003B3B3B0D0A'
+        return JsonResponse({'response': response})

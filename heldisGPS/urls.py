@@ -48,4 +48,5 @@ urlpatterns = [
     path('translate/offlineWifi/', offlineWifi, name='offlineWifi'),
     path('translate/wifiPositioning/', wifiPositioning, name='wifiPositioning'),
     path('translate/updateTime/', updateTime, name='updateTime'),
+    path('translate/setParams/', setParams, name='setParams'),
 ]
