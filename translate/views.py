@@ -21,6 +21,17 @@ def date_conversion(date):
     # Concaténer les composants en une seule chaîne hexadécimale
     return date_hex 
 
+def date_conversion_exact(date):
+    annee_hex = hex(date.year)[2:].zfill(4)
+    mois_hex = hex(date.month)[2:].zfill(2)
+    jour_hex = hex(date.day)[2:].zfill(2)
+    heure_hex = hex(date.hour)[2:].zfill(2)
+    minutes_hex = hex(date.minute)[2:].zfill(2)
+    secondes_hex = hex(date.second)[2:].zfill(2)
+    date_hex = annee_hex + mois_hex + jour_hex + heure_hex + minutes_hex + secondes_hex
+    # Concaténer les composants en une seule chaîne hexadécimale
+    return date_hex 
+
 @csrf_exempt
 # Vue pour décoder le message hexadécimal
 def login(request):
@@ -136,3 +147,14 @@ def wifiPositioning(request):
         date_now = datetime.datetime.now()
         response = '78780069'+response[4:16]+'0D0A'
         return JsonResponse({'response': response})
+    
+
+def updateTime(request):
+    if request.method == 'GET':
+        response = request.GET.get('hex_message', '')
+        date_now = datetime.datetime.now()
+        response = '78780830'+date_conversion_exact(date_now)+'0D0A'
+        return JsonResponse({'response': response})
+    
+
+ 
