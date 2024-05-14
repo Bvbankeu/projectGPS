@@ -130,6 +130,17 @@ def reste(request):
 def status(request):
     if request.method == 'GET':
         response = request.GET.get('hex_message', '')
+        batterie = int(response[4:6], 16)
+        imei_message = request.GET.get('imei', '')
+        # Créer un objet GpsCoordinates en lui affectant les valeurs nécessaires
+        gps_module, created = GpsModule.objects.get_or_create(id=imei_message, defaults={
+            'id': imei_message,
+            'battery': batterie,  # Ajoutez d'autres valeurs par défaut si nécessaire
+            'simNumber': '', 
+            'idEnfant': 0,
+        })
+        gps_module.battery = batterie
+        gps_module.save()
         response = '7878'+response+'0D0A'
         return JsonResponse({'response': response})
     
@@ -161,5 +172,5 @@ def setParams(request):
     if request.method == 'GET':
         response = request.GET.get('hex_message', '')
         date_now = datetime.datetime.now()
-        response = '78781F570030010000000000000000000000000000000000000000000000003B3B3B0D0A'
+        response = '78781F570005010000000000000000000000000000000000000000000000003B3B3B0D0A'
         return JsonResponse({'response': response})
