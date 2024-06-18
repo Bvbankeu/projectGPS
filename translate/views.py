@@ -8,7 +8,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.http import JsonResponse
 from urllib.parse import urlparse, parse_qs
 from position.models import GpsCoordinates, GpsModule
-import datetime
+import datetime, time
 
 def date_conversion(date):
     annee_hex = hex(date.year-2000)[2:].zfill(2)
@@ -59,6 +59,7 @@ def onlineGPS(request):
             'battery': 0.0,  # Ajoutez d'autres valeurs par défaut si nécessaire
             'simNumber': '', 
             'idEnfant': 0,
+            'status': 0,
         })
         gps_coordinates = GpsCoordinates.objects.create(
             date=GpsCoordinates.date_conversion(hex_message[4:16]),
@@ -80,7 +81,10 @@ def onlineGPS(request):
         gps_coordinates.save
         date_now = datetime.datetime.now()
         response = '78780010'+hex_message[4:16]+'0D0A'
-
+        #if gps_module.powerOff == 0:
+        #    return JsonResponse({'response': response})
+        #elif gps_module.powerOff == 1:
+        #    return '78780E34010108001200010107000122000D0A'
         return JsonResponse({'response': response})
     else:
         return JsonResponse({'error': 'Methode non autorisee'}, status=405)
@@ -95,6 +99,7 @@ def offlineGPS(request):
             'battery': 0.0,  # Ajoutez d'autres valeurs par défaut si nécessaire
             'simNumber': '', 
             'idEnfant': 0,
+            'status': 0,
         })
         gps_coordinates = GpsCoordinates.objects.create(
             date=GpsCoordinates.date_conversion(hex_message[4:16]),
@@ -138,8 +143,10 @@ def status(request):
             'battery': batterie,  # Ajoutez d'autres valeurs par défaut si nécessaire
             'simNumber': '', 
             'idEnfant': 0,
+            'status': 0,
         })
         gps_module.battery = batterie
+        gps_module.status = 1
         gps_module.save()
         response = '7878'+response+'0D0A'
         return JsonResponse({'response': response})
@@ -163,8 +170,10 @@ def wifiPositioning(request):
 def updateTime(request):
     if request.method == 'GET':
         response = request.GET.get('hex_message', '')
-        date_now = datetime.datetime.now()
-        response = '78780830'+date_conversion_exact(date_now)+'0D0A'
+        date_gmt = time.gmtime()
+        timestamp = time.mktime(date_gmt)
+        date_gmt_obj = datetime.datetime.fromtimestamp(timestamp)
+        response = '78780830'+date_conversion_exact(date_gmt_obj)+'0D0A'
         return JsonResponse({'response': response})
     
 
@@ -173,4 +182,44 @@ def setParams(request):
         response = request.GET.get('hex_message', '')
         date_now = datetime.datetime.now()
         response = '78781F570010010000000000000000000000000000000000000000000000003B3B3B0D0A'
+        return JsonResponse({'response': response})
+    
+
+def powerOn(request):
+    if request.method == 'GET':
+        response = request.GET.get('hex_message', '')
+        date_now = datetime.datetime.now()
+        response = '78780E34010108001200010107000122000D0A'
+        return JsonResponse({'response': response})
+    
+
+def powerOff(request):
+    if request.method == 'GET':
+        response = request.GET.get('hex_message', '')
+        date_now = datetime.datetime.now()
+        response = '78780E34010108001200010107000122000D0A'
+        return JsonResponse({'response': response})
+    
+
+def offStatus(request):
+    if request.method == 'GET':
+        imei_message = request.GET.get('imei', '')
+        # Créer un objet GpsCoordinates en lui affectant les valeurs nécessaires
+        gps_module = GpsModule.objects.get(id=imei_message)
+        gps_module.status = 0
+        gps_module.save()
+        response = '7878off'+imei_message+'0D0A'
+        return JsonResponse({'response': response})
+    
+
+def setStatus(request):
+    if request.method == 'GET':
+        response = request.GET.get('hex_message', '')
+        interval = int(response[4:6], 16)
+        imei_message = request.GET.get('imei', '')
+        # Créer un objet GpsCoordinates en lui affectant les valeurs nécessaires
+        #gps_module, created = GpsModule.objects.get(id=imei_message)
+        #gps_module.save()
+        proTime = '0213'+str(interval)
+        response = '7878'+proTime+'0D0A'
         return JsonResponse({'response': response})

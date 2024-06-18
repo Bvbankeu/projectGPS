@@ -10,6 +10,7 @@ class GpsModule(models.Model):
     battery     = models.FloatField()
     simNumber    = models.CharField(max_length=15)
     idEnfant = models.IntegerField()
+    status = models.IntegerField()
     
     def __unicode__(self):
         return "{0}".format(self.code)
