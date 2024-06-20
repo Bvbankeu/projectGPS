@@ -65,7 +65,8 @@ def onlineGPS(request):
             date=GpsCoordinates.date_conversion(hex_message[4:16]),
             latitude=GpsCoordinates.coordinates_conversion(hex_message[18:26]),
             longitude=GpsCoordinates.coordinates_conversion(hex_message[26:34]),
-            gpsModule=gps_module
+            gpsModule=gps_module,
+            date_bd = datetime.datetime.now()
         )
         #gps_coordinates.date = gps_coordinates.date_conversion(hex_message[:12])
         data_gps_info_length = hex_message[16:17]

@@ -21,6 +21,7 @@ class GpsCoordinates(models.Model):
     gpsModule = models.ForeignKey('GpsModule', related_name="gps_coordinates", on_delete=models.CASCADE)
     longitude = models.FloatField()
     latitude  = models.FloatField()
+    date_bd = models.DateTimeField()
    
     def __unicode__(self):
         return "{0}".format(self.code)
